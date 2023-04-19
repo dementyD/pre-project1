@@ -54,10 +54,8 @@ public class UserDaoJDBCImpl implements UserDao {
             statement.execute("SELECT * FROM dbusers");
             ResultSet resultSet = statement.getResultSet();
             while (resultSet.next()) {
-                if (resultSet.isLast()) {
-                    result.add(new User(resultSet.getString("name"), resultSet.getString("lastName"),
-                            resultSet.getByte("age")));
-                }
+                result.add(new User(resultSet.getString("name"), resultSet.getString("lastName"),
+                        resultSet.getByte("age")));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
