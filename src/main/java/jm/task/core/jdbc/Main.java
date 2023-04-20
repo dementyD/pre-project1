@@ -5,15 +5,10 @@ import jm.task.core.jdbc.service.UserServiceImpl;
 
 public class Main {
     public static void main(String[] args) {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
         UserService userService = new UserServiceImpl();
 
         userService.createUsersTable();
+
         userService.saveUser("Denis", "Denisov", (byte) 21);
         System.out.println(" User с именем – Denis добавлен в базу данных");
         userService.saveUser("Kirill", "Brill", (byte) 22);
@@ -27,6 +22,5 @@ public class Main {
 
         userService.cleanUsersTable();
         userService.dropUsersTable();
-
     }
 }
