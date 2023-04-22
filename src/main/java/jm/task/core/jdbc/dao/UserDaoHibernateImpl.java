@@ -3,6 +3,7 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
@@ -40,9 +41,8 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void removeUserById(long id) {
-        Criteria criteria = session.createCriteria(User.class);
         session.getTransaction().begin();
-        User user = (User) criteria.add(Restrictions.eq("id", id)).uniqueResult();
+        User user = (User) session.load(User.class, id);
         session.delete(user);
         session.getTransaction().commit();
     }
@@ -50,8 +50,8 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public List<User> getAllUsers() {
         session.getTransaction().begin();
-        Criteria criteria = session.createCriteria(User.class);
-        List<User> result = criteria.list();
+        Query query = session.createQuery("FROM User");
+        List<User> result = query.list();
         session.getTransaction().commit();
         return result;
     }
@@ -63,3 +63,4 @@ public class UserDaoHibernateImpl implements UserDao {
         session.getTransaction().commit();
     }
 }
+

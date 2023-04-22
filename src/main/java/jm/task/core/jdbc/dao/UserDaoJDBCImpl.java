@@ -32,17 +32,22 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try (Statement statement = Util.getConnectionJDBC().createStatement()) {
-            statement.execute("insert into dbUsers (name, lastName, age) values " +
-                    "('" + name + "', '" + lastName + "', '" + age + "')");
+        String sql = "INSERT INTO dbUsers (name, lastName, age) Values (?, ?, ?)";
+        try (PreparedStatement preparedStatement = Util.getConnectionJDBC().prepareStatement(sql)) {
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setByte(3, age);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void removeUserById(long id) {
-        try (Statement statement = Util.getConnectionJDBC().createStatement()) {
-            statement.execute("DELETE FROM dbUsers WHERE id = " + id + " ");
+        String sql = "DELETE FROM dbUsers WHERE id = ?";
+        try (PreparedStatement preparedStatement = Util.getConnectionJDBC().prepareStatement(sql)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
